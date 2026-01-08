@@ -1,20 +1,32 @@
-
-
 const http = require('../../lib/http');
 
-let sucess = true
+let success = true
 
-http.interceptors.request.use((config) => {
-    return  null;
-},() => {
-
-})
-http.interceptors.response.use((error) =>{
-    return Promise.resolve({data:{}})
-} , (error) => {
-    return sucess ? Promise.resolve({data:{}}): Promise.reject({})
-})
+http.defaults.adapter = async (config) => {
+    if (success) {
+        return {
+            data: {},
+            status: 200,
+            statusText: 'OK',
+            headers: {},
+            config,
+            request: {}
+        };
+    } else {
+        const error = new Error('Request failed with status code 404');
+        error.isAxiosError = true;
+        error.response = {
+            data: {},
+            status: 404,
+            statusText: 'Not Found',
+            headers: {},
+            config,
+            request: {}
+        };
+        throw error;
+    }
+}
 
 module.exports = (value) => {
-    sucess = value
+    success = value
 };

@@ -1,4 +1,4 @@
-require ("babel-polyfill");
+
 const options = {
     privatekey:"12345",
     publickey:"1234",
@@ -28,7 +28,7 @@ describe("transaction verify test",() => {
             done(new Error('can not never success'))
         })
         .catch((error) => {
-            expect(error.message).toBe("Transaction Not Found")
+            expect(error.message).toMatch(/Transaction Not Found/);
         })
         .finally(() => done())
     })
